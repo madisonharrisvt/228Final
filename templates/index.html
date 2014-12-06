@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"
+          rel="stylesheet">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/three.js/r66/three.js"></script>
+    <script src="//js.leapmotion.com/leap-0.6.2.min.js"></script>
+    <script src="//js.leapmotion.com/leap-plugins-0.1.6.1.js"></script>
+    <script src="//js.leapmotion.com/leap.rigged-hand-0.1.3.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato:100,400,900,100italic,400italic">
+
+  <script type=text/javascript>
+    // $(function() {
+
+
+    //   $('a#calculate').bind('click', function() {
+    //     $.getJSON('/_knn', {
+    //       a: $('input[name="a"]').val(),
+    //       b: $('input[name="b"]').val()
+    //     }, function(data) {
+    //       $("#result").text(data.result);
+    //     });
+    //     return false;
+    //   });
+
+      //$('a#calculate').bind('click', function() {
+      //  $.getJSON('/testendpoint', {
+      //    num $('input[name="a"]').val(),
+      //  }, function(data) {
+      //    $("#result").text(data.result);
+      //  });
+      //  return false;
+      //});
+    //});
+  </script>
+  </head>
+  <body>
+    <p id = "result">5.0</p>
+    <p id = "data">5.0</p>
+    <!-- <div class="container">
+      <div class="header">
+        <h3 class="text-muted">How To Manage JSON Requests</h3>
+      </div>
+      <hr/>
+      <div>
+      <p>
+    <input type="text" size="5" name="a"> +
+    <input type="text" size="5" name="b"> =
+    <span id="result">?</span>
+    <p><a href="javascript:void();" id="calculate">calculate server side</a>
+      </form>
+      </div>
+    </div> -->
+    <div id="numbers">
+     <svg width="150" height="150">
+       <circle id = "zero" cx="75" cy="75" r="55" stroke="white" stroke-width="7" fill="SlateGray" />
+       <text x="75" y="100"
+             font-family="sans-serif"
+             font-size="70px"
+             text-anchor="middle"
+             fill="white">0</text>
+     </svg>
+  </div>
+    <div id="labels"></div>
+  </body>
+  <script type="text/javascript" class="codepen">
+
+    var svgElement = document.getElementById("zero");
+    svgElement.addEventListener("mouseover", mouseOver);
+
+     function mouseOver() {
+        svgElement.setAttribute("r", 200);
+    }
+
+    function knnAlgorithm(){
+      $.getJSON('/_knn', {
+        a: $("#result").text()
+      }, function(data) {
+        $("#data").text(data.result);
+      });
+    }
+
+    var riggedHandPlugin;
+
+    var timer = 0;
+
+    Leap.loop({
+
+      hand: function(hand){
+        var label = hand.data('label');
+
+        timer = timer + 1;
+
+        // if (!label){
+
+        //   label = document.createElement('label');
+        //   document.body.appendChild(label);
+
+
+        //   /**
+        //    * Here we set the label to show the hand type
+        //    */
+          
+        //   result.innerHTML = hand.fingers[1].tipPosition[0];
+        //   //label.innerHTML = hand.confidence * 100;
+        //   hand.data('label', label)
+
+        // }else {result.innerHTML = hand.fingers[1].tipPosition[0];
+        //   //label.innerHTML = hand.confidence * 100;
+        // }
+
+      //   for i in range(0,5):
+      // finger = hand.fingers[i] # Set finger data
+      // for j in range(0,4):
+      //   bone = finger.bone(j)
+      //   boneBase = bone.prev_joint
+      //   boneTip = bone.next_joint
+      //   xBase = boneBase[0]
+      //   yBase = boneBase[1]
+      //   zBase = boneBase[2]
+      //   xTip = boneTip[0]
+      //   yTip = boneTip[1]
+      //   zTip = boneTip[2]
+
+        var stringToPass = "";
+        for(i = 0; i < 5; i++){
+          var finger = hand.fingers[i];
+
+          for(j = 0; j < 4; j++){
+            var bone = finger.bones[j];
+            var boneBase = bone.prevJoint;
+            var boneTip = bone.nextJoint;
+            var xTip = boneTip[0];
+            var yTip = boneTip[1];
+            var zTip = boneTip[2];
+
+            if( (j==0) || (j==3) ){
+              stringToPass += xTip + ",";
+              stringToPass += yTip + ",";
+              stringToPass += zTip + ",";
+            }
+          }
+        }
+
+        result.innerHTML = stringToPass;
+
+        if(timer % 29 == 0){
+
+          knnAlgorithm(); 
+        }
+
+        
+
+
+        var handMesh = hand.data('riggedHand.mesh');
+
+        var screenPosition = handMesh.screenPosition(
+          hand.palmPosition,
+          riggedHandPlugin.camera
+        );
+
+        // label.style.left = screenPosition.x + 'px';
+        // label.style.bottom = screenPosition.y + 'px';
+
+      }
+    })
+    .use('riggedHand', {
+        scale: 1.5,
+        boneColors: function (boneMesh, leapHand){
+          return {
+            hue: 0.33,
+            saturation: leapHand.confidence,
+            lightness: 1.0
+          }
+        }
+      })
+    .use('handEntry')
+    .on('handLost', function(hand){
+        var label = hand.data('label');
+        if (label){
+          document.body.removeChild(label);
+          hand.data({label: undefined});
+        }
+    })
+    .use('playback', {
+      recording: './left-or-right-77fps.json.lz',
+      timeBetweenLoops: 1000
+    });
+
+    riggedHandPlugin = Leap.loopController.plugins.riggedHand;
+
+  </script>
+</html>
