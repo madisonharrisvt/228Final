@@ -56,11 +56,11 @@
     <div id="numbers">
      <svg width="150" height="150">
        <circle id = "zero" cx="75" cy="75" r="55" stroke="white" stroke-width="7" fill="SlateGray" />
-       <text x="75" y="100"
+       <text id = circle x="75" y="100"
              font-family="sans-serif"
              font-size="70px"
              text-anchor="middle"
-             fill="white">0</text>
+             fill="white">1</text>
      </svg>
   </div>
     <div id="labels"></div>
@@ -74,11 +74,17 @@
         svgElement.setAttribute("r", 200);
     }
 
-    function knnAlgorithm(){
+    function knnAlgorithm(stringToPass){
       $.getJSON('/_knn', {
-        a: $("#result").text()
+        a: stringToPass
       }, function(data) {
-        $("#data").text(data.result);
+        //$("#zero").text(data.result);
+        if(data.result == 1){
+          $('#zero').attr('fill','Green');
+        }
+        else{
+          $('#zero').attr('fill','SlateGray');
+        }
       });
     }
 
@@ -144,15 +150,12 @@
           }
         }
 
-        result.innerHTML = stringToPass;
+        //result.innerHTML = stringToPass;
 
-        if(timer % 29 == 0){
+        if(timer % 80 == 0){
 
-          knnAlgorithm(); 
+          knnAlgorithm(stringToPass); 
         }
-
-        
-
 
         var handMesh = hand.data('riggedHand.mesh');
 
