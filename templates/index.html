@@ -2,8 +2,6 @@
 <html lang="en">
   <head>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"
-          rel="stylesheet">
     <script src="//cdnjs.cloudflare.com/ajax/libs/three.js/r66/three.js"></script>
     <script src="//js.leapmotion.com/leap-0.6.2.min.js"></script>
     <script src="//js.leapmotion.com/leap-plugins-0.1.6.1.js"></script>
@@ -35,10 +33,24 @@
       //});
     //});
   </script>
+  <style>
+    *{
+      font-family: "Lato", sans-serif;
+    }
+    body {
+        background-color: #C2E6FF;
+    }
+    #numbers{
+      position:fixed; 
+      width:100%; 
+      bottom:0px;
+      text-align: center;
+    }
+  </style>
   </head>
   <body>
-    <p id = "result">5.0</p>
-    <p id = "data">5.0</p>
+    <!-- <p id = "result">5.0</p>
+    <p id = "data">5.0</p> -->
     <!-- <div class="container">
       <div class="header">
         <h3 class="text-muted">How To Manage JSON Requests</h3>
@@ -54,24 +66,115 @@
       </div>
     </div> -->
     <div id="numbers">
-     <svg width="150" height="150">
-       <circle id = "zero" cx="75" cy="75" r="55" stroke="white" stroke-width="7" fill="SlateGray" />
-       <text id = circle x="75" y="100"
+     <svg width="120" height="120">
+       <circle id = "zeroCircle" cx="60" cy="60" r="45" stroke="#0099FF" stroke-width="7" fill="#0099FF" />
+       <text id = "zeroText" x="60" y="80"
              font-family="sans-serif"
-             font-size="70px"
+             font-size="50px"
+             text-anchor="middle"
+             fill="white">0</text>
+     </svg>
+     <svg width="120" height="120">
+       <circle id = "oneCircle" cx="60" cy="60" r="45" stroke="#0099FF" stroke-width="7" fill="#0099FF" />
+       <text id = "oneText" x="60" y="80"
+             font-family="sans-serif"
+             font-size="50px"
              text-anchor="middle"
              fill="white">1</text>
+     </svg>
+     <svg width="120" height="120">
+       <circle id = "twoCircle" cx="60" cy="60" r="45" stroke="#0099FF" stroke-width="7" fill="#0099FF" />
+       <text id = "twoText" x="60" y="80"
+             font-family="sans-serif"
+             font-size="50px"
+             text-anchor="middle"
+             fill="white">2</text>
+     </svg>
+     <svg width="120" height="120">
+       <circle id = "threeCircle" cx="60" cy="60" r="45" stroke="#0099FF" stroke-width="7" fill="#0099FF" />
+       <text id = "threeText" x="60" y="80"
+             font-family="sans-serif"
+             font-size="50px"
+             text-anchor="middle"
+             fill="white">3</text>
+     </svg>
+     <svg width="120" height="120">
+       <circle id = "fourCircle" cx="60" cy="60" r="45" stroke="#0099FF" stroke-width="7" fill="#0099FF" />
+       <text id = "fourText" x="60" y="80"
+             font-family="sans-serif"
+             font-size="50px"
+             text-anchor="middle"
+             fill="white">4</text>
+     </svg>
+     <svg width="120" height="120">
+       <circle id = "fiveCircle" cx="60" cy="60" r="45" stroke="#0099FF" stroke-width="7" fill="#0099FF" />
+       <text id = "fiveText" x="60" y="80"
+             font-family="sans-serif"
+             font-size="50px"
+             text-anchor="middle"
+             fill="white">5</text>
+     </svg>
+     <svg width="120" height="120">
+       <circle id = "sixCircle" cx="60" cy="60" r="45" stroke="#0099FF" stroke-width="7" fill="#0099FF" />
+       <text id = "sixText" x="60" y="80"
+             font-family="sans-serif"
+             font-size="50px"
+             text-anchor="middle"
+             fill="white">6</text>
+     </svg>
+     <svg width="120" height="120">
+       <circle id = "sevenCircle" cx="60" cy="60" r="45" stroke="#0099FF" stroke-width="7" fill="#0099FF" />
+       <text id = "sevenText" x="60" y="80"
+             font-family="sans-serif"
+             font-size="50px"
+             text-anchor="middle"
+             fill="white">7</text>
+     </svg>
+     <svg width="120" height="120">
+       <circle id = "eightCircle" cx="60" cy="60" r="45" stroke="#0099FF" stroke-width="7" fill="#0099FF" />
+       <text id = "eightText" x="60" y="80"
+             font-family="sans-serif"
+             font-size="50px"
+             text-anchor="middle"
+             fill="white">8</text>
+     </svg>
+     <svg width="120" height="120">
+       <circle id = "nineCircle" cx="60" cy="60" r="45" stroke="#0099FF" stroke-width="7" fill="#0099FF" />
+       <text id = "nineText" x="60" y="80"
+             font-family="sans-serif"
+             font-size="50px"
+             text-anchor="middle"
+             fill="white">9</text>
      </svg>
   </div>
     <div id="labels"></div>
   </body>
   <script type="text/javascript" class="codepen">
 
-    var svgElement = document.getElementById("zero");
-    svgElement.addEventListener("mouseover", mouseOver);
+    var numberToSign = 0;
+    var handRecording;
 
-     function mouseOver() {
-        svgElement.setAttribute("r", 200);
+    if(numberToSign == 0){
+        handRecording = './zerofps.json.lz';
+      }
+
+    if(numberToSign == 0){
+      $('#zeroCircle').attr('stroke','White');
+      $('#oneCircle').attr('stroke','#0099FF');
+      $('#twoCircle').attr('stroke','#0099FF');
+    } else if(1 == numberToSign){
+      $('#oneCircle').attr('stroke','White');
+      $('#zeroCircle').attr('stroke','#0099FF');
+      $('#twoCircle').attr('stroke','#0099FF');
+    } else if(2 == numberToSign){
+      $('#twoCircle').attr('stroke','White');
+      $('#zeroCircle').attr('stroke','#0099FF');
+      $('#oneCircle').attr('stroke','#0099FF');
+    }
+    else{
+      $('#zeroCircle').attr('stroke','#0099FF');
+      $('#oneCircle').attr('stroke','#0099FF');
+      $('#twoCircle').attr('stroke','#0099FF');
     }
 
     function knnAlgorithm(stringToPass){
@@ -79,14 +182,33 @@
         a: stringToPass
       }, function(data) {
         //$("#zero").text(data.result);
-        if(data.result == 1){
-          $('#zero').attr('fill','Green');
+        if(data.result == 0){
+          $('#zeroCircle').attr('fill','#47B56C');
+          $('#oneCircle').attr('fill','#0099FF');
+          $('#twoCircle').attr('fill','#0099FF');
+        } else if(data.result == 1){
+          $('#oneCircle').attr('fill','#47B56C');
+          $('#zeroCircle').attr('fill','#0099FF');
+          $('#twoCircle').attr('fill','#0099FF');
+        } else if(data.result == 2){
+          $('#twoCircle').attr('fill','#47B56C');
+          $('#zeroCircle').attr('fill','#0099FF');
+          $('#oneCircle').attr('fill','#0099FF');
         }
         else{
-          $('#zero').attr('fill','SlateGray');
+          $('#zeroCircle').attr('fill','#0099FF');
+          $('#oneCircle').attr('fill','#0099FF');
+          $('#twoCircle').attr('fill','#0099FF');
         }
       });
     }
+
+    // if($('#circle').text() == 1){
+    //   handRecording = './onefps.json.lz'
+    // }
+    // else if($('#circle').text() == 2){
+    //   handRecording = './twofps.json.lz'
+    // }
 
     var riggedHandPlugin;
 
@@ -130,6 +252,16 @@
       //   yTip = boneTip[1]
       //   zTip = boneTip[2]
 
+      if(numberToSign == 0){
+        handRecording = './zerofps.json.lz';
+      }
+      else if(numberToSign == 1){
+        handRecording = './onefps.json.lz';
+      }
+      else if(numberToSign == 2){
+        handRecording = './twofps.json.lz';
+      }
+
         var stringToPass = "";
         for(i = 0; i < 5; i++){
           var finger = hand.fingers[i];
@@ -153,7 +285,6 @@
         //result.innerHTML = stringToPass;
 
         if(timer % 80 == 0){
-
           knnAlgorithm(stringToPass); 
         }
 
@@ -188,7 +319,7 @@
         }
     })
     .use('playback', {
-      recording: './left-or-right-77fps.json.lz',
+      recording: handRecording,
       timeBetweenLoops: 1000
     });
 

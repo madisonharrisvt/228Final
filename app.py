@@ -49,6 +49,18 @@ def add_numbers():
     b = request.args.get('b', 0, type=int)
     return jsonify(result=a + b)
 
+@app.route('/zerofps.json.lz')
+def zerofps():
+    return open('zerofps.json.lz').read()    
+
+@app.route('/onefps.json.lz')
+def onefps():
+    return open('onefps.json.lz').read()
+
+@app.route('/twofps.json.lz')
+def twofps():
+    return open('twofps.json.lz').read()    
+
 @app.route('/_knn')
 def knn():
     a = request.args.get('a', 'hi', type=str)
